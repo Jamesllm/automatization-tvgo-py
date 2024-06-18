@@ -1,44 +1,66 @@
 import pyautogui
 import time
+import requests
 
-#size
+# Obtener el tamaño de la pantalla
 screen_width, screen_height = pyautogui.size()
 
-def halfScreen(): 
-    percentX = screen_width-(screen_width*0.5)
-    percentY = screen_height-(screen_height*0.5)
+# Función para calcular las coordenadas del centro de la pantalla
+def halfScreen():
+    percentX = screen_width / 2
+    percentY = screen_height / 2
     return percentX, percentY
 
-pyautogui.hotkey('win', 'r')
+# URL para abrir en Chrome
+url = "https://canales-latinos.vercel.app/"
+headers = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, como Gecko) Chrome/58.0.3029.110 Safari/537.36"
+}
+
+# Función para comprobar si la URL devuelve el código de estado 200
+def check_status(url):
+    try:
+        response = requests.get(url, headers=headers)
+        return response.status_code == 200
+    except requests.RequestException as e:
+        print(f"Error comprobando el estado: {e}")
+        return False
+
+# Esperar hasta que la URL devuelva el código de estado 200
+while not check_status(url):
+    print("Esperando que el sitio esté disponible...")
+    time.sleep(5)
+
+# Abrir Chrome con la URL especificada
+pyautogui.hotkey("win", "r")
 time.sleep(1.5)
-pyautogui.write('chrome.exe "https://tvgo.americatv.com.pe/"', interval=0.01)
+pyautogui.write(f'chrome.exe "{url}"', interval=0.01)
 time.sleep(0.5)
-pyautogui.press('enter')
+pyautogui.press("enter")
 time.sleep(3)
 
-#click - X and Y
-pyautogui.click(halfScreen())
-time.sleep(2)
+# Rutas de las imágenes
+america_image = "data/america.png"  # Ruta de la imagen de América
+play_image = "data/play.png"  # Ruta de la imagen del botón de reproducir
 
-if (screen_width == 1280) and (screen_height == 720):
-    #scroll down sizeY-(sizeY*0.5)-20
-    pyautogui.scroll(-340)
-    time.sleep(2)
-    #0.093  0.95% -- x
-    #0.082  0.85% -- y
-    pyautogui.click(1160, 660)
+# Bucle para hacer clic en la imagen de América
+while True:
+    location = pyautogui.locateOnScreen(america_image, confidence=0.8)  # Ajustar el nivel de confianza según sea necesario
+    if location is not None:
+        pyautogui.click(location)
+        break
+    time.sleep(1)
 
-elif (screen_width == 1600) and (screen_height == 900):
-    pyautogui.scroll(-348)
-    time.sleep(2)
-    pyautogui.click(1500, 820)
+# Esperar un poco antes de buscar el botón de reproducir
+time.sleep(1)
 
-elif (screen_width == 1920) and (screen_height == 1080):
-    pyautogui.scroll(-355)
-    time.sleep(2)
-    pyautogui.click(1800, 1000)
+# Bucle para hacer clic en el botón de reproducir
+while True:
+    location = pyautogui.locateOnScreen(play_image, confidence=0.8)  # Ajustar el nivel de confianza según sea necesario
+    if location is not None:
+        pyautogui.click(location)
+        break
+    time.sleep(1)
 
-time.sleep(1.5)
-pyautogui.moveTo(halfScreen())
-time.sleep(0.5)
-pyautogui.moveTo(halfScreen())
+# Presionar 'f' para entrar en pantalla completa
+pyautogui.press("f")
