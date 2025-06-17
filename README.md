@@ -11,3 +11,24 @@ Copia el archivo inicio.py que creaste en el paso 1 y pégalo dentro de la carpe
 Reinicia tu PC y el código de Python dentro de inicio.py se ejecutará automáticamente.
 
 Es importante tener en cuenta que estos pasos son específicos para Windows. Si estás utilizando otro sistema operativo, como macOS o Linux, los pasos pueden ser diferentes.
+
+
+## 🚀 Ejecucion
+
+1. Crear entorno virtual
+
+```bash
+python -m venv env
+```
+
+2. Usar entorno virtual
+
+```bash
+env\Scripts\activate
+```
+
+3. Instalar librerias
+
+```bash
+pip install -r requirements.txt
+```
